@@ -13,9 +13,11 @@ public class Main {
         while (flag) {
             input = in.nextLine();
             if (isInteger(input)) {
-                if (Integer.parseInt(input) > 1 && Integer.parseInt(input) < 30 ) {
-                    flag = false;
-                    numberOfBits = Integer.parseInt(input);
+                if (input.length() > 0 && input.length() < 5) {
+                    if (Integer.parseInt(input) > 1 && Integer.parseInt(input) < 30 ) {
+                        flag = false;
+                        numberOfBits = Integer.parseInt(input);
+                    }
                 }
             }
             if (flag)
@@ -55,7 +57,7 @@ public class Main {
         flag = true;
         while (flag) {
             input = in.nextLine();
-            if (isInteger(input)) {
+            if (isInteger(input) && input.length() < 10) {
                 flag = false;
                 sampleCount = Integer.parseInt(input);
             }
@@ -76,10 +78,11 @@ public class Main {
                 flag = false;
                 showMessages = false;
             }
+            if (flag)
+                System.out.println("Please enter 1 for yes or 0 for no:");
         }
 
         int totalBitCount = numberOfBits + P.toString().length() - 1;
-        
         int changedCount = 0;
         int caughtChangedCount = 0;
         int notCaughtChangedCount = 0;
@@ -131,7 +134,7 @@ public class Main {
             if (!(Character.isDigit(string.charAt(i))))
                 return false;
         }
-        return true;
+        return string.length() > 0;
     }
 
     public static boolean isBinary(String string) {

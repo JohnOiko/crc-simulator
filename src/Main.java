@@ -6,18 +6,18 @@ public class Main {
         Scanner in = new Scanner(System.in);
         String input;
         int numberOfBits = 1;
-        System.out.println("Give desired number of the message's bits (k), up to 31 bits are supported:");
+        System.out.println("Give desired number of the message's bits (k), up to 29 bits are supported:");
         boolean flag = true;
         while (flag) {
             input = in.nextLine();
             if (isInteger(input)) {
-                if (Integer.parseInt(input) > 1 && Integer.parseInt(input) < 32 ) {
+                if (Integer.parseInt(input) > 1 && Integer.parseInt(input) < 30 ) {
                     flag = false;
                     numberOfBits = Integer.parseInt(input);
                 }
             }
             if (flag)
-                System.out.println("Please give a valid number of bits (k) that is between 2 and 31:");
+                System.out.println("Please give a valid number of bits (k) that is between 2 and 29:");
         }
 
         BinaryNumber P = new BinaryNumber(0);
@@ -26,13 +26,13 @@ public class Main {
         while (flag) {
             input = in.nextLine();
             if (isBinary(input)) {
-                if (input.length() > 0 && input.length() < numberOfBits) {
+                if (input.length() > 1 && input.length() < 32 - numberOfBits) {
                     flag = false;
                     P.setBinaryValue(input);
                 }
             }
             if (flag)
-                System.out.println("Please give a valid binary number to divide the messages with (P) that has less than " + numberOfBits + " digits:");
+                System.out.println("Please give a valid binary number to divide the messages with (P) that starts with 1 and has between 2 and " + (31 - numberOfBits) + " digits:");
         }
 
         double errorRate = 0;
@@ -111,15 +111,15 @@ public class Main {
             }
 
             if (showMessages) {
-                System.out.println("\nMessage that was sent:     " + beforeSentMessage.toString(numberOfBits + P.toString().length() - 1));
-                System.out.println("Message that was received: " + afterSentMessage.toString(numberOfBits + P.toString().length() - 1));
-                System.out.println("Quotient that the receiver found: " + sentQuotient);
+                System.out.println("\n" + (i+1) + ".) Message that was sent:     " + beforeSentMessage.toString(numberOfBits + P.toString().length() - 1));
+                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "   Message that was received: " + afterSentMessage.toString(numberOfBits + P.toString().length() - 1));
+                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "   Quotient that the receiver found: " + sentQuotient + ((beforeSentMessage.toString(numberOfBits + P.toString().length() - 1).equals(afterSentMessage.toString(numberOfBits + P.toString().length() - 1))) ? " (no change - " : " (change happened - ") + (sentQuotient.toString().equals("0") ? "no change detected)" : "change detected)"));
             }
 
         }
-        System.out.printf("%nPercent of changed during transmission: %.2f%%%n", ((double)changedCount/sampleCount)*100);
-        System.out.printf("Percent of changed during transmission that were caught: %.2f%%%n", ((double)caughtChangedCount/sampleCount)*100);
-        System.out.printf("Percent of changed during transmission that were not caught: %.2f%%%n", ((double)notCaughtChangedCount/sampleCount)*100);
+        System.out.printf("%n-Percent of changed during transmission: %.2f%%%n", ((double)changedCount/sampleCount)*100);
+        System.out.printf("-Percent of changed during transmission that were caught: %.2f%%%n", ((double)caughtChangedCount/sampleCount)*100);
+        System.out.printf("-Percent of changed during transmission that were not caught: %.2f%%%n", ((double)notCaughtChangedCount/sampleCount)*100);
     }
 
     public static boolean isInteger(String string) {
@@ -132,10 +132,12 @@ public class Main {
 
     public static boolean isBinary(String string) {
         for (int i = 0 ; i < string.length() ; i++) {
+            if (i == 0 && string.charAt(i) != '1')
+                return false;
             if (!(string.charAt(i) == '0' || string.charAt(i) == '1'))
                 return false;
         }
-        return true;
+        return string.length() > 0;
     }
 
     public static boolean isDecimalPercentage(String string) {

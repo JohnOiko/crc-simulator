@@ -61,6 +61,21 @@ public class Main {
                 System.out.println("Please give a valid amount of samples to use:");
         }
 
+        boolean showMessages = false;
+        System.out.println("\nDo you want individual messages to be shown? Enter 1 for yes or 0 for no:");
+        flag = true;
+        while (flag) {
+            input = in.nextLine();
+            if (input.equals("1")) {
+                flag = false;
+                showMessages = true;
+            }
+            else if (input.equals("0")) {
+                flag = false;
+                showMessages = false;
+            }
+        }
+
         int changedCount = 0;
         int caughtChangedCount = 0;
         int notCaughtChangedCount = 0;
@@ -93,6 +108,12 @@ public class Main {
                     notCaughtChangedCount++;
                 else
                     caughtChangedCount++;
+            }
+
+            if (showMessages) {
+                System.out.println("\nMessage that was sent:     " + beforeSentMessage.toString(numberOfBits + P.toString().length() - 1));
+                System.out.println("Message that was received: " + afterSentMessage.toString(numberOfBits + P.toString().length() - 1));
+                System.out.println("Quotient that the receiver found: " + sentQuotient);
             }
 
         }

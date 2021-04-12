@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Scanner;
 
 public class Main {
@@ -111,15 +113,15 @@ public class Main {
             }
 
             if (showMessages) {
-                System.out.println("\n" + (i+1) + ".) Message sent:     " + beforeSentMessage.toString(numberOfBits + P.toString().length() - 1));
-                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "   Message received: " + afterSentMessage.toString(numberOfBits + P.toString().length() - 1));
-                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "   Received CRC: " + sentQuotient + ((beforeSentMessage.toString(numberOfBits + P.toString().length() - 1).equals(afterSentMessage.toString(numberOfBits + P.toString().length() - 1))) ? " (no change happened - " : " (change happened - ") + (sentQuotient.toString().equals("0") ? "no change detected)" : "change detected)"));
+                System.out.println("\n" + (i+1) + ") Message sent:     " + beforeSentMessage.toString(numberOfBits + P.toString().length() - 1));
+                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "  Message received: " + afterSentMessage.toString(numberOfBits + P.toString().length() - 1));
+                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "  Received CRC: " + sentQuotient + ((beforeSentMessage.toString(numberOfBits + P.toString().length() - 1).equals(afterSentMessage.toString(numberOfBits + P.toString().length() - 1))) ? " (no change happened - " : " (change happened - ") + (sentQuotient.toString().equals("0") ? "no change detected)" : "change detected)"));
             }
 
         }
-        System.out.printf("%n-Percent of changed during transmission: %.2f%%%n", ((double)changedCount/sampleCount)*100);
-        System.out.printf("-Percent of changed during transmission that were caught: %.2f%%%n", ((double)caughtChangedCount/sampleCount)*100);
-        System.out.printf("-Percent of changed during transmission that were not caught: %.2f%%%n", ((double)notCaughtChangedCount/sampleCount)*100);
+        System.out.println("\n-Percent of changed messages during transmission: " + BigDecimal.valueOf(((double)changedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros() + "%");
+        System.out.println("-Percent of changed messages during transmission that were caught: " + BigDecimal.valueOf(((double)caughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros() + "%");
+        System.out.println("-Percent of changed messages during transmission that were not caught: " + BigDecimal.valueOf(((double)notCaughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros() + "%");
     }
 
     public static boolean isInteger(String string) {

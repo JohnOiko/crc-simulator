@@ -35,9 +35,9 @@ public class BinaryNumber {
         return leadingZeroes.concat(binaryString);
     }
 
-    public static BinaryNumber xorDivide(String divident, String divisor) {
-        while (divident.length() >= divisor.length() && !(divident.equals("0"))) {
-            StringBuilder temp = new StringBuilder(divident);
+    public static BinaryNumber xorDivide(String dividend, String divisor) {
+        while (dividend.length() >= divisor.length() && !(dividend.equals("0"))) {
+            StringBuilder temp = new StringBuilder(dividend);
             int counter = 0;
             boolean flag = true;
             for (int i = 0 ; i < divisor.length() ; i++) {
@@ -52,9 +52,9 @@ public class BinaryNumber {
                 }
             }
             temp.delete(0, counter);
-            divident = temp.toString();
+            dividend = temp.toString();
         }
-        return new BinaryNumber(divident);
+        return new BinaryNumber(dividend);
     }
 
     public static int toDecimal(String binaryString) {

@@ -78,6 +78,8 @@ public class Main {
             }
         }
 
+        int totalBitCount = numberOfBits + P.toString().length() - 1;
+        
         int changedCount = 0;
         int caughtChangedCount = 0;
         int notCaughtChangedCount = 0;
@@ -92,19 +94,19 @@ public class Main {
             }
 
             beforeSentMessage.setBinaryValue(originalMessage.toString(numberOfBits) + "0".repeat(Math.max(0, P.toString().length() - 1)));
-            BinaryNumber crcValue = BinaryNumber.xorDivide(beforeSentMessage.toString(numberOfBits + P.toString().length() - 1), P.toString());
+            BinaryNumber crcValue = BinaryNumber.xorDivide(beforeSentMessage.toString(totalBitCount), P.toString());
             beforeSentMessage.setBinaryValue(originalMessage.toString(numberOfBits) + crcValue.toString(P.toString().length() - 1));
 
-            StringBuilder temp = new StringBuilder(beforeSentMessage.toString(numberOfBits + P.toString().length() - 1));
+            StringBuilder temp = new StringBuilder(beforeSentMessage.toString(totalBitCount));
             for (int j = temp.length() - 1 ; j >= 0 ; j--) {
                 if (Math.random() < errorRate)
                     temp.setCharAt(j, temp.charAt(j) == '0' ? '1' : '0');
             }
 
             BinaryNumber afterSentMessage = new BinaryNumber(temp.toString());
-            BinaryNumber sentQuotient = BinaryNumber.xorDivide(afterSentMessage.toString(numberOfBits + P.toString().length() - 1), P.toString());
+            BinaryNumber sentQuotient = BinaryNumber.xorDivide(afterSentMessage.toString(totalBitCount), P.toString());
 
-            if (!(beforeSentMessage.toString(numberOfBits + P.toString().length() - 1).equals(afterSentMessage.toString(numberOfBits + P.toString().length() - 1)))) {
+            if (!(beforeSentMessage.toString(totalBitCount).equals(afterSentMessage.toString(totalBitCount)))) {
                 changedCount++;
                 if (sentQuotient.toString().equals("0"))
                     notCaughtChangedCount++;
@@ -113,15 +115,15 @@ public class Main {
             }
 
             if (showMessages) {
-                System.out.println("\n" + (i+1) + ") Message sent:     " + beforeSentMessage.toString(numberOfBits + P.toString().length() - 1));
-                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "  Message received: " + afterSentMessage.toString(numberOfBits + P.toString().length() - 1));
-                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "  Received CRC: " + sentQuotient + ((beforeSentMessage.toString(numberOfBits + P.toString().length() - 1).equals(afterSentMessage.toString(numberOfBits + P.toString().length() - 1))) ? " (no change happened - " : " (change happened - ") + (sentQuotient.toString().equals("0") ? "no change detected)" : "change detected)"));
+                System.out.println("\n" + (i+1) + ") Message sent:     " + beforeSentMessage.toString(totalBitCount));
+                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "  Message received: " + afterSentMessage.toString(totalBitCount));
+                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "  Received CRC: " + sentQuotient + ((beforeSentMessage.toString(totalBitCount).equals(afterSentMessage.toString(totalBitCount))) ? " (no change happened - " : " (change happened - ") + (sentQuotient.toString().equals("0") ? "no change detected)" : "change detected)"));
             }
 
         }
-        System.out.println("\n-Percent of changed messages during transmission: " + BigDecimal.valueOf(((double)changedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros() + "%");
-        System.out.println("-Percent of changed messages during transmission that were caught: " + BigDecimal.valueOf(((double)caughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros() + "%");
-        System.out.println("-Percent of changed messages during transmission that were not caught: " + BigDecimal.valueOf(((double)notCaughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros() + "%");
+        System.out.println("\n-Percent of changed messages during transmission: " + BigDecimal.valueOf(((double)changedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros().toPlainString() + "%");
+        System.out.println("-Percent of changed messages during transmission that were caught: " + BigDecimal.valueOf(((double)caughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros().toPlainString() + "%");
+        System.out.println("-Percent of changed messages during transmission that were not caught: " + BigDecimal.valueOf(((double)notCaughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros().toPlainString() + "%");
     }
 
     public static boolean isInteger(String string) {

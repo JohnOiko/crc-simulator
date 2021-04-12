@@ -40,7 +40,7 @@ public class Main {
         }
 
         double errorRate = 0;
-        System.out.println("\nGive bit error rate (E) as a decimal:");
+        System.out.println("\nGive bit error rate (BER) as a decimal:");
         flag = true;
         while (flag) {
             input = in.nextLine();
@@ -49,7 +49,7 @@ public class Main {
                     errorRate = Double.parseDouble(input);
             }
             if (flag)
-                System.out.println("Please give a valid bit error rate (E) as a decimal that is between 0 and 1:");
+                System.out.println("Please give a valid bit error rate (BER) as a decimal that is between 0 and 1:");
         }
 
         int sampleCount = 1;

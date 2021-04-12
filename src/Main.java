@@ -26,13 +26,13 @@ public class Main {
         while (flag) {
             input = in.nextLine();
             if (isBinary(input)) {
-                if (input.length() > 1 && input.length() < 32 - numberOfBits) {
+                if (input.length() > 1 && input.length() < 32 - numberOfBits && input.charAt(0) == '1' && input.charAt(input.length() - 1) == '1') {
                     flag = false;
                     P.setBinaryValue(input);
                 }
             }
             if (flag)
-                System.out.println("Please give a valid binary number to divide the messages with (P) that starts with 1 and has between 2 and " + (31 - numberOfBits) + " digits:");
+                System.out.println("Please give a valid binary number to divide the messages with (P) that starts and ends with 1 and has between 2 and " + (31 - numberOfBits) + " digits:");
         }
 
         double errorRate = 0;
@@ -111,9 +111,9 @@ public class Main {
             }
 
             if (showMessages) {
-                System.out.println("\n" + (i+1) + ".) Message that was sent:     " + beforeSentMessage.toString(numberOfBits + P.toString().length() - 1));
-                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "   Message that was received: " + afterSentMessage.toString(numberOfBits + P.toString().length() - 1));
-                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "   Quotient that the receiver found: " + sentQuotient + ((beforeSentMessage.toString(numberOfBits + P.toString().length() - 1).equals(afterSentMessage.toString(numberOfBits + P.toString().length() - 1))) ? " (no change - " : " (change happened - ") + (sentQuotient.toString().equals("0") ? "no change detected)" : "change detected)"));
+                System.out.println("\n" + (i+1) + ".) Message sent:     " + beforeSentMessage.toString(numberOfBits + P.toString().length() - 1));
+                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "   Message received: " + afterSentMessage.toString(numberOfBits + P.toString().length() - 1));
+                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "   Received CRC: " + sentQuotient + ((beforeSentMessage.toString(numberOfBits + P.toString().length() - 1).equals(afterSentMessage.toString(numberOfBits + P.toString().length() - 1))) ? " (no change happened - " : " (change happened - ") + (sentQuotient.toString().equals("0") ? "no change detected)" : "change detected)"));
             }
 
         }

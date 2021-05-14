@@ -124,9 +124,9 @@ public class Main {
             }
 
         }
-        System.out.println("\n-Percent of changed messages during transmission: " + BigDecimal.valueOf(((double)changedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros().toPlainString() + "%");
-        System.out.println("-Percent of changed messages during transmission that were caught: " + BigDecimal.valueOf(((double)caughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros().toPlainString() + "%");
-        System.out.println("-Percent of changed messages during transmission that were not caught: " + BigDecimal.valueOf(((double)notCaughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros().toPlainString() + "%");
+        System.out.println("\n-Percent of changed messages during transmission: " + BigDecimal.valueOf(((double)changedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros().toPlainString() + "% (" + changedCount + "/" + sampleCount + ")");
+        System.out.println("-Percent of changed messages during transmission that were caught: " + BigDecimal.valueOf(((double)caughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros().toPlainString() + "% (" + caughtChangedCount + "/" + sampleCount + ")");
+        System.out.println("-Percent of changed messages during transmission that were not caught: " + BigDecimal.valueOf(((double)notCaughtChangedCount/sampleCount)*100).setScale(8, MathContext.DECIMAL64.getRoundingMode()).stripTrailingZeros().toPlainString() + "% (" + notCaughtChangedCount + "/" + sampleCount + ")");
     }
 
     public static boolean isInteger(String string) {

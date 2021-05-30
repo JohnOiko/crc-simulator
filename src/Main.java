@@ -80,10 +80,12 @@ public class Main {
         // While loop that stops when the input is valid by making the flag false.
         while (flag) {
             input = in.nextLine();
-            // If the input is an integer and has less than 10 digits, make the flag false to break the loop and save the value of the sample count.
+            // If the input is a positive non negative integer and has less than 10 digits, make the flag false to break the loop and save the value of the sample count.
             if (isInteger(input) && input.length() < 10) {
-                flag = false;
-                sampleCount = Integer.parseInt(input);
+                if (Integer.parseInt(input) > 0) {
+                    flag = false;
+                    sampleCount = Integer.parseInt(input);
+                }
             }
             // If the flag is still true that means the given input was not valid and a message requesting input must be shown again.
             if (flag)

@@ -41,7 +41,7 @@ public class Main {
         // While loop that stops when the input is valid by making the flag false.
         while (flag) {
             input = in.nextLine();
-            // If the input is a binary number, has between 2 to 32 - numberOfBits digits (because P must be less or equal to the message that is to be sent) and
+            // If the input is a binary number, has between 2 to 31 - numberOfBits digits (because P must be less or equal to the message that is to be sent) and
             // starts and ends with a 1, make the flag false to break the loop and save the value of P.
             if (isBinary(input)) {
                 if (input.length() > 1 && input.length() < 32 - numberOfBits && input.charAt(0) == '1' && input.charAt(input.length() - 1) == '1') {
@@ -134,7 +134,8 @@ public class Main {
             for (int j = numberOfBits - 1 ; j >= 0 ; j--) {
                 // If Math.random returns a number that is less than 0.5 (it returns a number such that 0.0 <= Math.random() < 1.0, so Math.random() < 0.5 gives a 50% chance),
                 // then set the j digit of the originalMessage to 1 by doing originalMessage = originalMessage + 2 ^ j (using decimal values). Else if Math.random returns a
-                // number that is more or equal to 0.5, do nothing in which case the loop moves to the next bit since j is decreased by the for loop.
+                // number that is more or equal to 0.5, do nothing in which case the loop moves to the next bit since j is decreased by the for loop (thus the j digit of
+                // originalMessage is 0).
                 if (Math.random() < 0.5)
                     originalMessage.setDecimalValue(originalMessage.getDecimalValue() + (int) Math.pow(2, j));
             }
@@ -144,7 +145,7 @@ public class Main {
             messageTransmitted.setBinaryValue(originalMessage.toString(numberOfBits) + "0".repeat(Math.max(0, P.toString().length() - 1)));
             // Calculate the FCS sequence using the method BinaryNumber.xorDivide by doing messageTransmitted xor P.
             BinaryNumber FCS = BinaryNumber.xorDivide(messageTransmitted.toString(totalBitCount), P.toString());
-            // Set the message that will be transmitted to the original message and add the FCS sequence to the end of it. Also call the method BinaryNumber.toString with
+            // Set the message that will be transmitted to the original message and attach the FCS sequence to the end of it. Also call the method BinaryNumber.toString with
             // P.length - 1 as parameter so as to get the FCS sequence with P.length - 1 bits (with added zeros at the front if the FCS sequence has less bits).
             messageTransmitted.setBinaryValue(originalMessage.toString(numberOfBits) + FCS.toString(P.toString().length() - 1));
 
@@ -155,14 +156,15 @@ public class Main {
             for (int j = temp.length() - 1 ; j >= 0 ; j--) {
                 // If Math.random returns a number that is less than errorRate (it returns a number such that 0.0 <= Math.random() < 1.0, so Math.random() < errorRate gives
                 // a chance of (errorRate * 100)%), then set the j digit of the message to the opposite of its current value. Else if Math.random returns a number that is
-                // more or equal to errorRate, do nothing in which case the loop moves to the next bit since j is decreased by the for loop.
+                // more or equal to errorRate, do nothing in which case the loop moves to the next bit since j is decreased by the for loop (thus the j digit of the message
+                // remains unchanged).
                 if (Math.random() < errorRate)
                     temp.setCharAt(j, temp.charAt(j) == '0' ? '1' : '0');
             }
 
             // The message that was received (with any possible errors) given the value of the corresponding String value of the previous StringBuilder object.
             BinaryNumber messageReceived = new BinaryNumber(temp.toString());
-            // The result of the calculation messageReceived xor P (if it's 0, then no error is detected).
+            // The remainder of the calculation messageReceived xor P (if it's 0, then no error is detected).
             BinaryNumber R = BinaryNumber.xorDivide(messageReceived.toString(totalBitCount), P.toString());
 
             // If the message before being transmitted is different from the message that was received there was at least one error during transmission.
@@ -170,11 +172,11 @@ public class Main {
                 // Since there was at least one error increase the counter for the amount of messages that changed/had errors while being transmitted by one.
                 changedCount++;
                 // If the result of xor dividing the message that was received with P is 0 (which means the algorithm does not recognize any errors to the message while being
-                // transmitted), increase the counter for the amount of messages that changed/had errors while being transmitted and were recognized by the algorithm.
+                // transmitted), increase the counter for the amount of messages that changed/had errors while being transmitted and were not recognized by the algorithm.
                 if (R.toString().equals("0"))
                     notCaughtChangedCount++;
                 // Else if R != 0 (which means the algorithm recognizes errors to the message while being transmitted), increase the counter for the amount of messages that
-                // changed/had errors while being transmitted and were not recognized by the algorithm.
+                // changed/had errors while being transmitted and were recognized by the algorithm.
                 else
                     caughtChangedCount++;
             }
@@ -185,8 +187,8 @@ public class Main {
                 System.out.println("\n" + (i+1) + ") Message sent:     " + messageTransmitted.toString(totalBitCount));
                 // Prints the message that was received.
                 System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "  Message received: " + messageReceived.toString(totalBitCount));
-                // Prints the FCS sequence (R) of the message that was received.
-                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "  Received FCS: " + R + ((messageTransmitted.toString(totalBitCount).equals(messageReceived.toString(totalBitCount))) ? " (no change happened - " : " (change happened - ") + (R.toString().equals("0") ? "no change detected)" : "change detected)"));
+                // Prints the calculated remainder R of the message that was received.
+                System.out.println(" ".repeat(Integer.toString(i + 1).length()) + "  Remainder calculated after transmission: " + R + ((messageTransmitted.toString(totalBitCount).equals(messageReceived.toString(totalBitCount))) ? " (no change happened - " : " (change happened - ") + (R.toString().equals("0") ? "no change detected)" : "change detected)"));
             }
 
         }
@@ -212,7 +214,7 @@ public class Main {
 
     // Static method that returns true if the given String is a binary number, otherwise it returns false.
     public static boolean isBinary(String string) {
-        // For loop that checks if the first character of the string is not 1 and any of the rest of the String's characters aren't 0 or 1 and if that is true
+        // For loop that checks if the first character of the string is not 1 and if any of the rest of the String's characters aren't 0 or 1 and if that is true
         // it returns false as the String cannot be a binary number.
         for (int i = 0 ; i < string.length() ; i++) {
             if (i == 0 && string.charAt(i) != '1')
@@ -231,8 +233,8 @@ public class Main {
         if (string.length() <= 1) {
             return string.equals("1") || string.equals("0");
         }
-        // If the String has at least 2 characters and the first one is not 0 or the second one is not a ., the return true only if the string is one of the values
-        // 1.0 or 1.00 or 0.0 or 0.00
+        // If the String has at least 2 characters and the first one is not 0 or the second one is not a ., then return true only if the string is one of the values
+        // 1.0 or 1.00 or 0.0 or 0.00.
         if (string.charAt(0) != '0' || string.charAt(1) != '.') {
             return string.equals("1.0") || string.equals("1.00") || string.equals("0.0") || string.equals("0.00");
         }

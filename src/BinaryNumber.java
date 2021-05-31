@@ -81,8 +81,8 @@ public class BinaryNumber {
             temp.delete(0, counter);
             dividend = temp.toString();
         }
-        // Once the while loop has stopped, dividend has the result xor calculation and a BinaryNumber is returned with the
-        // value of the dividend.
+        // Once the while loop has stopped, dividend has the result of the xor calculation and a BinaryNumber is returned with
+        // the value of the dividend.
         return new BinaryNumber(dividend);
     }
 
